@@ -3,11 +3,12 @@ package com.landoop.kafka.connect.slack
 import java.util.{LinkedList, List => JList, Map => JMap}
 import java.util.concurrent.{BlockingQueue, LinkedBlockingQueue}
 
+import com.landoop.kafka.connect.{Logging, MetricsSupport}
 import org.apache.kafka.connect.source.{SourceRecord, SourceTask}
 
 import scala.concurrent.Future
 
-class SlackSourceTask extends SourceTask {
+class SlackSourceTask extends SourceTask with MetricsSupport with Logging {
 
   val queue: BlockingQueue[SourceRecord] = new LinkedBlockingQueue[SourceRecord]()
 
@@ -31,6 +32,10 @@ class SlackSourceTask extends SourceTask {
     val result: JList[SourceRecord] = new LinkedList[SourceRecord]()
 
     if (queue.isEmpty) result.add(queue.take())
+    // val record: SourceRecord = queue.take()
+    // if (queue.isEmpty) result.add(record)
+    // metrics.su
+    // result.size();
     queue.drainTo(result)
 
     result
