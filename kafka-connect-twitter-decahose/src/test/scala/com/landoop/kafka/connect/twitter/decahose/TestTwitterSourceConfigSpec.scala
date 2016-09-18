@@ -3,19 +3,7 @@ package com.landoop.kafka.connect.twitter.decahose
 import org.scalatest.{FunSuite, Matchers}
 import scala.collection.JavaConverters._
 
-class TestTwitterSourceConfigSpec extends FunSuite with Matchers {
-
-  val getConfig = {
-    Map(TwitterSourceConfig.CONSUMER_KEY_CONFIG->"test",
-      TwitterSourceConfig.CONSUMER_SECRET_CONFIG->"c-secret",
-      TwitterSourceConfig.SECRET_CONFIG->"secret",
-      TwitterSourceConfig.TOKEN_CONFIG->"token",
-      TwitterSourceConfig.TRACK_TERMS->"term1",
-      TwitterSourceConfig.TWITTER_APP_NAME->"myApp",
-      TwitterSourceConfig.BATCH_SIZE->"1337",
-      TwitterSourceConfig.TOPIC->"just-a-topic"
-    )
-  }
+class TestTwitterSourceConfigSpec extends FunSuite with Matchers with MockConfiguration {
 
   test("A TwitterSourceConfig should be correctly configured") {
     val config = getConfig
@@ -29,4 +17,5 @@ class TestTwitterSourceConfigSpec extends FunSuite with Matchers {
     taskConfig.getInt(TwitterSourceConfig.BATCH_SIZE) shouldBe 1337
     taskConfig.getString(TwitterSourceConfig.TOPIC) shouldBe "just-a-topic"
   }
+
 }
