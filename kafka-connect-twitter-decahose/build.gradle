@@ -1,0 +1,29 @@
+project(":kafka-connect-twitter-decahose") {
+
+    ext {
+        akkaVersion = "2.4.3"
+        kafkaVersion = "0.10.0.0"
+        avroVersion = "1.7.7"
+        guavaVersion = "19.0"
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    dependencies {
+//        testCompile "com.datamountaineer:kafka-testkit:$dataMountaineerTestKitVersion"
+
+        compile "org.apache.kafka:connect-api:$kafkaVersion" // provided
+        compile "com.twitter:hbc-twitter4j:2.2.0" // hosebird version
+        compile "org.apache.avro:avro:$avroVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+        compile "org.slf4j:slf4j-simple:1.7.13"
+//        testCompile "org.scalamock:scalamock-scalatest-support_2.11:3.2.2"
+//        testCompile "org.mockito:mockito-all:1.10.19"
+        testCompile "org.scalatest:scalatest_2.11:3.0.0-M1"
+    }
+
+}

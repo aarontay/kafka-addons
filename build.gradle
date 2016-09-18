@@ -16,7 +16,7 @@ buildscript {
 allprojects {
     group = 'com.landoop'
     version =  '0.1'
-    description = "kafka-connect"
+    description = "kafka-connectors"
     apply plugin: 'java'
     apply plugin: 'scala'
     apply plugin: 'maven'
@@ -45,9 +45,8 @@ allprojects {
         dataMountaineerTestKitVersion = "0.2"
         avro4sVersion = "1.3.2"
         json4sVersion = "3.3.0"
-        kiteMiniClusterVersion = "1.1.0"
         gsonVersion = "2.6.2"
-        dataMountaineerCQLVersion = "0.5"
+        KafkaConnectQueryLanguage = "0.5"
         confluentVersion = '3.0.0'
     }
 
@@ -67,7 +66,7 @@ allprojects {
         compile "org.apache.kafka:connect-api:$kafkaVersion"
         compile "org.apache.kafka:connect-runtime:$kafkaVersion"
         compile "com.typesafe.scala-logging:scala-logging-slf4j_$scalaMajorVersion:$scalaLoggingVersion"
-        compile ("com.datamountaineer:kcql:$dataMountaineerCQLVersion") {
+        compile ("com.datamountaineer:kcql:$KafkaConnectQueryLanguage") {
             exclude group: "com.google.guava", module: "guava"
         }
 //        "org.apache.kafka" % "connect-api" % kafkaVersion,
