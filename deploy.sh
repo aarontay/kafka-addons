@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 git pull
 gradle clean build fatJar
 cp kafka-connect-slack/build/libs/kafka-connect-slack-0.1-3.0.0-all.jar /opt/dm-stream-reactor/kafka-connect-slack2/
