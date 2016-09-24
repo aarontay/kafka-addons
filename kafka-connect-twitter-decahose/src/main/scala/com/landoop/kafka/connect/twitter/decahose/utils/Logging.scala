@@ -1,4 +1,4 @@
-package com.landoop.kafka.connect.twitter.decahose
+package com.landoop.kafka.connect.twitter.decahose.utils
 
 import org.slf4j.LoggerFactory
 

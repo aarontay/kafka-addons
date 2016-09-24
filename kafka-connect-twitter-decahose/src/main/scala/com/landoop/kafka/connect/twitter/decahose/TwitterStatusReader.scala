@@ -10,8 +10,9 @@ import org.apache.kafka.connect.source.SourceRecord
 import twitter4j._
 
 import scala.collection.JavaConverters._
-import Extensions._
+import com.landoop.kafka.connect.twitter.decahose.utils.Extensions._
 import com.landoop.kafka.connect.twitter.decahose.model.TwitterStatus
+import com.landoop.kafka.connect.twitter.decahose.utils.Logging
 
 class StatusEnqueuer(queue: LinkedBlockingQueue[Status]) extends StatusListener with Logging {
   override def onStallWarning(stallWarning: StallWarning) = log.warn("onStallWarning")
@@ -61,8 +62,6 @@ object StatusToTwitterStatusStructure extends StatusToSourceRecord {
 }
 
 /**
-  * Created by andrew@datamountaineer.com on 24/02/16.
-  * kafka-connect-twitter
   */
 class TwitterStatusReader(client: BasicClient,
                           rawQueue: LinkedBlockingQueue[String],

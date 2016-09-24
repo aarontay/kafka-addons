@@ -1,8 +1,8 @@
-package com.landoop.kafka.connect.twitter.decahose
+package com.landoop.kafka.connect.twitter.decahose.utils
 
 import java.util.concurrent.{LinkedBlockingQueue, TimeUnit}
-import com.google.common.collect.Queues
 import java.util
+import com.google.common.collect.Queues
 
 object Extensions {
 
@@ -11,4 +11,5 @@ object Extensions {
       Queues.drain[T](lbq, collection, maxElements, timeout, unit)
     }
   }
+
 }

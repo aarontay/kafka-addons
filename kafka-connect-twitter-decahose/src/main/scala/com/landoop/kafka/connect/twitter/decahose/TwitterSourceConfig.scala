@@ -43,7 +43,7 @@ object TwitterSourceConfig {
 
 class TwitterSourceConfig(props: util.Map[String, String])
   extends AbstractConfig(TwitterSourceConfig.config, props) {
-  val terms = List() //getList(TwitterSourceConfig.TRACK_TERMS)
+//  val terms = List() //getList(TwitterSourceConfig.TRACK_TERMS)
   //  val locations = getList(TwitterSourceConfig.TRACK_LOCATIONS)
   //  val users = getList(TwitterSourceConfig.TRACK_FOLLOW)
   //  val language = getList(TwitterSourceConfig.LANGUAGE)
