@@ -1,24 +1,25 @@
 package com.landoop.kafka.connect.twitter.decahose.experiments
 
+import com.landoop.kafka.connect.twitter.decahose.utils.Logging
 import com.landoop.kafka.connect.twitter.decahose.model.Account
-import java.io.{BufferedReader, InputStreamReader}
 import java.util.concurrent.LinkedBlockingQueue
 import java.net.{HttpURLConnection, URL, URLConnection}
 import java.util.zip.GZIPInputStream
 import scala.concurrent.duration._
 import sun.misc.BASE64Encoder
+import java.io._
 
 /**
-  * A simple experiments to build an efficient Decahose client without any external dependencies
+  * A simple experiment to build an efficient Decahose client with minimum dependencies
   */
-object ConsumeDecahoseApp extends App {
+object ConsumeDecahoseApp extends App with Logging {
 
   val gnipAccount = Account()
 
   val downstream = new LinkedBlockingQueue[String](10000)
   val gzipedStreamingConnection = getStreamingConnection(gzip = true)
+  val uncompressedStreamingConnection = getStreamingConnection(gzip = false)
 
-  // () throws IOException ?
   def getStreamingConnection(gzip: Boolean): URLConnection = {
 
     // Create an http connection
@@ -26,16 +27,19 @@ object ConsumeDecahoseApp extends App {
     httpConnection.setReadTimeout(1.hour.toMillis.toInt)
     httpConnection.setConnectTimeout(10.seconds.toMillis.toInt)
     httpConnection.setRequestProperty("Authorization", createAuthHeader(gnipAccount.username, gnipAccount.password))
-    // 50-60% improvement due to reduced bandwidth
-    if (gzip)
+    // 50-150% improvement due to reduced bandwidth
+    if (gzip) {
+      log.info("Creating GZIP connection")
       httpConnection.setRequestProperty("Accept-Encoding", "gzip")
+    } else
+      log.info("Creating UNCOMPRESSED connection")
 
     // Create streaming connection and get response code
-    val inputStream = httpConnection.getInputStream
+    val inputStream = getInputStream(httpConnection)
     val responseCode = httpConnection.getResponseCode
 
     if (responseCode >= 200 && responseCode <= 299) {
-      println("Streaming endpoint response : " + responseCode)
+      log.info("Streaming endpoint response : " + responseCode)
 
       val bufferedReader =
         if (gzip)
@@ -45,12 +49,18 @@ object ConsumeDecahoseApp extends App {
 
       var counter = 0
       val startTime = System.nanoTime
-      val input: Stream[String] = Stream.continually(bufferedReader readLine())
-      input.forall { line =>
-        counter += 1
-        //println(counter + " " + line)
-        displayStatistics(counter, startTime)
-        true
+      try {
+        Stream.continually(bufferedReader readLine()).forall { line =>
+          if (line == null)
+            throw new EOFException("Connection has been reset")
+          counter += 1
+          // println(counter + " " + line)
+          displayStatistics(counter, startTime)
+          true
+        }
+      } catch {
+        case eof: EOFException =>
+          log.warn("Caught EOF exception")
       }
 
     }
@@ -58,17 +68,29 @@ object ConsumeDecahoseApp extends App {
     httpConnection
   }
 
-  def displayStatistics(counter: Int, startTime: Long) =
-    if (counter % 1000 == 0) {
-      val seconds = (System.nanoTime - startTime) / 1000000000
-      println(s"$seconds sec to fetch [$counter] tweets")
-      println(s"Tweets / sec : ${counter / seconds}")
+  // When you disconnect & re-try too soon - you might get a 502 response
+  def getInputStream(httpConnection: HttpURLConnection): InputStream = {
+    try {
+      httpConnection.getInputStream
+    } catch {
+      case ioe: IOException =>
+        log.warn(ioe.toString)
+        log.warn("Retrying in 500 msec")
+        Thread.sleep(500)
+        getInputStream(httpConnection)
     }
+  }
+
+  // Display some statistics on the screen
+  def displayStatistics(counter: Int, startTime: Long) =
+  if (counter % 1000 == 0) {
+    val seconds = (System.nanoTime - startTime) / 1000000000
+    log.info(s"Tweets / sec : ${counter / seconds}")
+  }
 
   def createAuthHeader(username: String, password: String): String = {
     val authToken = (username + ":" + password).getBytes
-    //"Basic " + base64Encode(authToken)
-    "Basic " + twitter4j.BASE64Encoder.encode(authToken)
+    "Basic " + base64Encode(authToken)
   }
 
   def base64Encode(bytes: Array[Byte]): String =
@@ -77,7 +99,8 @@ object ConsumeDecahoseApp extends App {
       .replace("\n", "")
       .replace("\r", "")
 
-  def setBackfillCount(count: Int) = {}
+  def setBackfillCount(count: Int) = {
+  }
 
 }
 

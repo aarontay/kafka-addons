@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "com.twitter" % "hbc-twitter4j" % "2.2.0", // hosebird version
   "org.apache.avro" % "avro" % "1.8.0",
   "com.google.guava" % "guava" % guavaVersion,
-  "org.slf4j" % "slf4j-simple" % "1.7.13",
+  "ch.qos.logback" % "logback-classic" % "1.0.1", // by using logback, we are actually using SLF4J
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
