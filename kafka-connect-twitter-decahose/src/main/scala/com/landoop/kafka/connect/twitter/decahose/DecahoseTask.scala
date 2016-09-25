@@ -4,9 +4,10 @@ import com.landoop.kafka.connect.twitter.decahose.utils.Logging
 import org.apache.kafka.connect.source.{SourceRecord, SourceTask}
 import java.util
 
-class TwitterDecahoseSourceTask extends SourceTask with Logging {
+// Decahose Kafka Connect 'Source' Task
+class DecahoseTask extends SourceTask with Logging {
 
-  private var reader : Option[TwitterStatusReader] = _
+  private var reader : Option[DecahoseReader] = _
 
   override def poll(): util.List[SourceRecord] = {
     require(reader.isDefined, "Twitter client not initialized!")
@@ -14,8 +15,8 @@ class TwitterDecahoseSourceTask extends SourceTask with Logging {
   }
 
   override def start(props: util.Map[String, String]): Unit = {
-    val sourceConfig = new TwitterSourceConfig(props)
-    reader = Some(TwitterReader(config = sourceConfig, context = context))
+    val sourceConfig = new DecahoseConfig(props)
+    reader = Some(new DecahoseReader(config = sourceConfig, context = context))
     println()
   }
 

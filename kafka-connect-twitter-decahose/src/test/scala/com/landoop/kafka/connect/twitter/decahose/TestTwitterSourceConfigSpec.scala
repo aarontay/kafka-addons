@@ -6,12 +6,11 @@ import org.scalatest.{FunSuite, Matchers}
 class TestTwitterSourceConfigSpec extends FunSuite with Matchers with MockConfiguration {
 
   test("A TwitterSourceConfig should be correctly configured") {
-    val taskConfig = new TwitterSourceConfig(getConfig)
-    taskConfig.getString(TwitterSourceConfig.TWITTER_USERNAME) shouldBe "some-username"
-    taskConfig.getPassword(TwitterSourceConfig.TWITTER_PASSWORD).value shouldBe "some-password"
-    taskConfig.getString(TwitterSourceConfig.TWITTER_URL) shouldBe "decahose-url-comma-separated-if-more-than-one"
-    taskConfig.getString(TwitterSourceConfig.TWITTER_APP_NAME) shouldBe "some-app-name"
-    taskConfig.getString(TwitterSourceConfig.TOPIC) shouldBe "some-topic"
+    val taskConfig = new DecahoseConfig(getConfig)
+    taskConfig.getString(DecahoseConfig.GNIP_USERNAME) shouldBe "some-username"
+    taskConfig.getPassword(DecahoseConfig.GNIP_PASSWORD).value shouldBe "some-password"
+    taskConfig.getString(DecahoseConfig.GNIP_ENDPOINTS) shouldBe "decahose-url-comma-separated-if-more-than-one"
+    taskConfig.getString(DecahoseConfig.TOPIC) shouldBe "some-topic"
   }
 
 }

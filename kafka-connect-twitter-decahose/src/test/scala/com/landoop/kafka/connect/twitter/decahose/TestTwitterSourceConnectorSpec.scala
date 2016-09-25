@@ -23,7 +23,7 @@ class TestTwitterSourceConnectorSpec extends FunSuite with Matchers with MockCon
 
   test("A TwitterDecahoseConnector  should provide the correct taskClass") {
     val t = new TwitterSourceConnector()
-    t.taskClass() should be(classOf[TwitterDecahoseSourceTask])
+    t.taskClass() should be(classOf[DecahoseTask])
   }
 
   test("A TwitterDecahoseConnector should return a taskConfig for each task") {

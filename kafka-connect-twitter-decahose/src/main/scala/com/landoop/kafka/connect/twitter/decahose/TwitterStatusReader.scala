@@ -1,16 +1,11 @@
 package com.landoop.kafka.connect.twitter.decahose
 
-import java.util
-import java.util.concurrent.{Executors, LinkedBlockingQueue, TimeUnit}
-
-import com.twitter.hbc.httpclient.BasicClient
-import com.twitter.hbc.twitter4j.Twitter4jStatusClient
+import java.util.concurrent.LinkedBlockingQueue
 import org.apache.kafka.connect.data.Schema
 import org.apache.kafka.connect.source.SourceRecord
 import twitter4j._
 
 import scala.collection.JavaConverters._
-import com.landoop.kafka.connect.twitter.decahose.utils.Extensions._
 import com.landoop.kafka.connect.twitter.decahose.model.TwitterStatus
 import com.landoop.kafka.connect.twitter.decahose.utils.Logging
 
@@ -59,51 +54,4 @@ object StatusToTwitterStatusStructure extends StatusToSourceRecord {
       TwitterStatus.schema,
       TwitterStatus.struct(status))
   }
-}
-
-/**
-  */
-class TwitterStatusReader(client: BasicClient,
-                          rawQueue: LinkedBlockingQueue[String],
-                          batchSize : Int,
-                          batchTimeout: Double,
-                          topic: String,
-                          statusConverter: StatusToSourceRecord = StatusToTwitterStatusStructure
-                         ) extends Logging {
-  log.info("Initialising Twitter Stream Reader")
-  val statusQueue = new LinkedBlockingQueue[Status](10000)
-
-  //Construct the status client
-  val t4jClient = new Twitter4jStatusClient(
-                        client,
-                        rawQueue,
-                        List[StatusListener](new StatusEnqueuer(statusQueue)).asJava,
-                        Executors.newFixedThreadPool(1))
-
-  //connect and subscribe
-  t4jClient.connect()
-  t4jClient.process()
-
-  /**
-    * Drain the queue
-    *
-    * @return A List of SourceRecords
-    * */
-  def poll() : util.List[SourceRecord] = {
-    if (client.isDone) log.warn("Client connection closed unexpectedly: ", client.getExitEvent.getMessage) //TODO: what next?
-
-    val l = new util.ArrayList[Status]()
-    statusQueue.drainWithTimeoutTo(l, batchSize, (batchTimeout * 1E9).toLong, TimeUnit.NANOSECONDS)
-    l.asScala.map(statusConverter.convert(_, topic)).asJava
-  }
-
-  /**
-    * Stop the HBC client
-    * */
-  def stop() = {
-    log.info("Stop Twitter client")
-    client.stop()
-  }
-
-
 }
