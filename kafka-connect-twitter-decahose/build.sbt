@@ -14,8 +14,8 @@ val guavaVersion = "19.0"
 
 libraryDependencies ++= Seq(
   "org.apache.kafka" % "connect-api" % kafkaVersion, // provided
-  "com.twitter" % "hbc-core" % "2.2.0",
-  "com.twitter" % "hbc-twitter4j" % "2.2.0", // hosebird version
+//  "com.twitter" % "hbc-core" % "2.2.0",
+//  "com.twitter" % "hbc-twitter4j" % "2.2.0", // hosebird version
   "org.apache.avro" % "avro" % "1.8.0",
   "com.google.guava" % "guava" % guavaVersion,
   "ch.qos.logback" % "logback-classic" % "1.0.1", // by using logback, we are actually using SLF4J

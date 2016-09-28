@@ -7,7 +7,7 @@ import scala.collection.JavaConverters._
 import scala.util.{Failure, Try}
 import java.util
 
-class TwitterSourceConnector extends Connector with Logging {
+class DecahoseSourceConnector extends Connector with Logging {
 
   private var configProps: util.Map[String, String] = _
 

@@ -10,7 +10,7 @@ class TestTwitterSourceConnectorSpec extends FunSuite with Matchers with MockCon
   val myScalaMap = getConfig.asScala.+("TwitterSourceConfig.BATCH_SIZE" -> "this is no integer")
 
   test("A TwitterDecahoseConnector should start with valid properties") {
-    val t = new TwitterSourceConnector()
+    val t = new DecahoseSourceConnector()
     t.start(getConfig)
   }
 
@@ -22,12 +22,12 @@ class TestTwitterSourceConnectorSpec extends FunSuite with Matchers with MockCon
   //  }
 
   test("A TwitterDecahoseConnector  should provide the correct taskClass") {
-    val t = new TwitterSourceConnector()
+    val t = new DecahoseSourceConnector()
     t.taskClass() should be(classOf[DecahoseTask])
   }
 
   test("A TwitterDecahoseConnector should return a taskConfig for each task") {
-    val t = new TwitterSourceConnector()
+    val t = new DecahoseSourceConnector()
     t.taskConfigs(42).size() should be(42)
   }
 }
