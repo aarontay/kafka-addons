@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <configuration>
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -10,7 +9,6 @@
     <logger name="org.apache.kafka.clients.consumer.ConsumerConfig" level="WARN"/>
     <logger name="org.apache.kafka.common.utils.AppInfoParser" level="WARN"/>
     <logger name="io.confluent.kafka.serializers.KafkaAvroDeserializerConfig" level="WARN"/>
-
 
     <root level="INFO">
         <appender-ref ref="stdout"/>

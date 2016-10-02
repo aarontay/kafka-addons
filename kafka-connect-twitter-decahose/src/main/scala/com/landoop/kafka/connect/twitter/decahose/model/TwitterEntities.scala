@@ -1,9 +1,20 @@
 package com.landoop.kafka.connect.twitter.decahose.model
 
-case class TwitterEntities(hashtags: List[String],
-                           urls: List[String],
-                           symbols: List[String],
-                           user_mentions: List[UserMention])
+case class TwitterHashTag(text: String,
+                          indices: List[Int])
+
+case class TwitterSymbol(text: String,
+                         indices: List[Int])
+
+case class TwitterEntities(hashtags: List[TwitterHashTag],
+                           urls: List[TwitterUrl],
+                           user_mentions: List[UserMention],
+                           symbols: List[TwitterSymbol])
+
+case class TwitterUrl(url: String,
+                      expanded_url: String,
+                      display_url: String,
+                      indices: List[Int])
 
 case class UserMention(screen_name: String, // i.e. "Cnvrswrld"
                        name: String, // i.e. "Conversation World"

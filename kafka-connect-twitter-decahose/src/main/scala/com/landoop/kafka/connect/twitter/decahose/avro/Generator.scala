@@ -1,9 +1,7 @@
-package com.landoop.kafka.connect.twitter.decahose.model
+package com.landoop.kafka.connect.twitter.decahose.avro
 
+import com.landoop.kafka.connect.twitter.decahose.model.Generator
 import org.apache.kafka.connect.data.{Schema, SchemaBuilder, Struct}
-
-case class Generator(displayName: String,
-                     link: String)
 
 object Generator {
 

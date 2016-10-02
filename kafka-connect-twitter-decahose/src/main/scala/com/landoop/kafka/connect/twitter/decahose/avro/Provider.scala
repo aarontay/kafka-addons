@@ -1,11 +1,7 @@
-package com.landoop.kafka.connect.twitter.decahose.model
+package com.landoop.kafka.connect.twitter.decahose.avro
 
+import com.landoop.kafka.connect.twitter.decahose.model.Provider
 import org.apache.kafka.connect.data.{Schema, SchemaBuilder, Struct}
-
-case class Provider(objectType: String, // i.e. "service"
-                    displayName: String, // i.e. "Twitter"
-                    link: String // i.e. "http:\/\/www.twitter.com"
-                   )
 
 object Provider {
 
