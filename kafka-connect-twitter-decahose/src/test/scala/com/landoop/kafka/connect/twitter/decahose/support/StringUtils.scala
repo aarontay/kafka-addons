@@ -28,9 +28,9 @@ object StringUtils {
   def sameLength(shareActivity: ShareActivity, tweet: String) = {
     val toJson = unescapeUnicode(write(shareActivity)).replace(" ", "")
     val originalTweet = unescapeUnicode(tweet.replace("\\/", "/").replace(" ", ""))
-    val difference = originalTweet.length - toJson.length
-    // We allow up to 4 chars diff as sometimes a Long co-ordinate i.e. 102.764270 will become 102.76427
-    val same = (difference >=0) && (difference <= 4)
+    var difference = originalTweet.replace(".000000,", ".0,").length - toJson.length
+    // Forgive a few chars diff as sometimes a Long co-ordinate i.e. 102.764270 will become 102.76427
+    val same = (difference >= 0) && (difference <= 16)
     if (!same) {
       println("Original " + difference)
       println(originalTweet)

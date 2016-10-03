@@ -80,7 +80,7 @@ case class Gnip(urls: Option[List[GnipUrl]],
 
 case class GnipUrl(url: Option[String],
                    expanded_url: String,
-                   expanded_status: Int,
+                   expanded_status: Either[Int, String], // FCK ! THIS CAN BE NULL
                    expanded_url_title: String,
                    expanded_url_description: String)
 
