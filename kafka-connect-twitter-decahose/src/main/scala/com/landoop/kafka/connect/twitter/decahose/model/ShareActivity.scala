@@ -13,11 +13,12 @@ case class ShareActivity(id: String,
                          `object`: PostActivity,
                          favoritesCount: Int,
                          twitter_entities: TwitterEntities,
-                         twitter_extended_entities: TwitterExtendedEntities,
+                         twitter_extended_entities: Option[TwitterExtendedEntities],
                          //inReplyTo: Option[InReplyTo], // Only when verb=post
                          twitter_lang: String,
                          retweetCount: Int,
                          gnip: Option[Gnip],
-                         twitter_filter_level: String) {
+                         twitter_filter_level: String,
+                         twitter_quoted_status: Option[PostActivity]) {
   require(verb == "share", "Error in ShareActivity marshalling")
 }

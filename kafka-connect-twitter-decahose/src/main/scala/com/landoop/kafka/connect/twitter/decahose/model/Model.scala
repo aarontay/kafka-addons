@@ -1,10 +1,18 @@
 package com.landoop.kafka.connect.twitter.decahose.model
 
-case class Generator(displayName: String, link: String)
+case class Generator(displayName: String,
+                     link: String)
 
-case class Provider(objectType: String, displayName: String, link: String)
+case class Provider(objectType: String,
+                    displayName: String,
+                    link: String)
 
 case class InReplyTo(link: String)
+
+case class LongObject(body: String,
+                      display_text_range: List[Int],
+                      twitter_entities: TwitterEntities,
+                      twitter_extended_entities: Option[TwitterExtendedEntities])
 
 case class NoteObject(objectType: String,
                       id: String,
@@ -39,15 +47,36 @@ case class Actor(objectType: String,
   require(objectType == "person", "Error marshalling Actor")
 }
 
-case class Link(href: String, rel: String)
+case class Link(href: String,
+                rel: String)
 
-case class Location(objectType: String, displayName: String) {
-  require(objectType == "place", "Error marshalling Location")
+case class Location(objectType: String,
+                    displayName: String,
+                    // hmm
+                    name: Option[String],
+                    country_code: Option[String],
+                    twitter_country_code: Option[String],
+                    twitter_place_type: Option[String],
+                    link: Option[String],
+                    geo: Option[GeoLocation]
+                   ) {
+  require(objectType == "place" || objectType == "Point", "Error marshalling Location") // TODO: Check Point
 }
+
+case class GeoLocation(`type`: String,
+                       coordinates: List[List[List[Double]]]) {
+  require(`type` == "Polygon" || `type` == "Point", "Not a polygon")
+}
+
+case class PointGeoLocation(`type`: String,
+                            coordinates: List[Double]) {
+  require(`type` == "Point", "Not a point")
+}
+
 
 /* -------- Gnip -------- */
 case class Gnip(urls: Option[List[GnipUrl]],
-                profileLocations: List[GnipProfileLocation])
+                profileLocations: Option[List[GnipProfileLocation]])
 
 case class GnipUrl(url: Option[String],
                    expanded_url: String,
@@ -60,7 +89,11 @@ case class GnipProfileLocation(address: GnipAddress,
                                geo: GnipGeo,
                                objectType: String)
 
-case class GnipAddress(country: String, countryCode: String, region: Option[String])
+case class GnipAddress(country: String,
+                       countryCode: String,
+                       locality: Option[String],
+                       region: Option[String],
+                       subRegion: Option[String])
 
 case class GnipGeo(coordinates: List[Double],
                    `type`: String)
@@ -90,10 +123,19 @@ case class TwitterExtendedMedia(id: Long,
                                 expanded_url: String,
                                 `type`: String,
                                 sizes: MediaSizes,
+                                video_info: Option[VideoInfo],
                                 source_status_id: Option[Long],
                                 source_status_id_str: Option[String],
                                 source_user_id: Option[Long],
                                 source_user_id_str: Option[String])
+
+case class VideoInfo(aspect_ratio: List[Int],
+                     duration_millis: Option[Int],
+                     variants: List[VideoVariants])
+
+case class VideoVariants(bitrate: Option[Int], // +1
+                         content_type: String,
+                         url: String)
 
 case class MediaSizes(thumb: MediaInfo,
                       medium: MediaInfo,
