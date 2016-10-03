@@ -8,7 +8,7 @@ case class ShareActivity(id: String,
                          provider: Provider,
                          link: String,
                          body: String,
-                         display_text_range: List[Int], // Only when verb=post
+                         display_text_range: Option[List[Int]], // Only when verb=post
                          actor: Actor,
                          `object`: PostActivity,
                          favoritesCount: Int,

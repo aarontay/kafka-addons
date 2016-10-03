@@ -46,10 +46,10 @@ case class Location(objectType: String, displayName: String) {
 }
 
 /* -------- Gnip -------- */
-case class Gnip(urls: List[GnipUrl],
+case class Gnip(urls: Option[List[GnipUrl]],
                 profileLocations: List[GnipProfileLocation])
 
-case class GnipUrl(url: String,
+case class GnipUrl(url: Option[String],
                    expanded_url: String,
                    expanded_status: Int,
                    expanded_url_title: String,
@@ -60,7 +60,7 @@ case class GnipProfileLocation(address: GnipAddress,
                                geo: GnipGeo,
                                objectType: String)
 
-case class GnipAddress(country: String, countryCode: String)
+case class GnipAddress(country: String, countryCode: String, region: Option[String])
 
 case class GnipGeo(coordinates: List[Double],
                    `type`: String)
@@ -75,11 +75,12 @@ case class TwitterSymbol(text: String,
 case class TwitterEntities(hashtags: List[TwitterHashTag],
                            urls: List[TwitterUrl],
                            user_mentions: List[UserMention],
-                           symbols: List[TwitterSymbol])
+                           symbols: List[TwitterSymbol],
+                           media: Option[List[TwitterExtendedMedia]])
 
 case class TwitterExtendedEntities(media: List[TwitterExtendedMedia])
 
-case class TwitterExtendedMedia(id: String,
+case class TwitterExtendedMedia(id: Long,
                                 id_str: String,
                                 indices: List[Int],
                                 media_url: String,
@@ -88,7 +89,11 @@ case class TwitterExtendedMedia(id: String,
                                 display_url: String,
                                 expanded_url: String,
                                 `type`: String,
-                                sizes: MediaSizes)
+                                sizes: MediaSizes,
+                                source_status_id: Option[Long],
+                                source_status_id_str: Option[String],
+                                source_user_id: Option[Long],
+                                source_user_id_str: Option[String])
 
 case class MediaSizes(thumb: MediaInfo,
                       medium: MediaInfo,
