@@ -1,7 +1,7 @@
 package com.landoop.kafka.connect.twitter.decahose
 
 import org.apache.kafka.common.config.{AbstractConfig, ConfigDef}
-import org.apache.kafka.common.config.ConfigDef.{Type, Importance}
+import org.apache.kafka.common.config.ConfigDef.{Importance, Type}
 import java.util
 
 object DecahoseConfig {
@@ -29,12 +29,12 @@ object DecahoseConfig {
 
 class DecahoseConfig(props: util.Map[String, String]) extends AbstractConfig(DecahoseConfig.config, props) {
   val username = getString(DecahoseConfig.GNIP_USERNAME)
-  val password = getString(DecahoseConfig.GNIP_PASSWORD)
-  val endpoints = getList(DecahoseConfig.GNIP_ENDPOINTS)
+  val password = getPassword(DecahoseConfig.GNIP_PASSWORD)
+  val endpoints = getString(DecahoseConfig.GNIP_ENDPOINTS)
   val topic = getString(DecahoseConfig.TOPIC)
   if (username.length == 0)
     throw new RuntimeException("You need to provide a gnip username")
-  if (password.length == 0)
+  if (password.toString.length == 0)
     throw new RuntimeException("You need to provide a gnip password")
   if (endpoints.isEmpty)
     throw new RuntimeException("You need to provide at least one gnip endpoint")
